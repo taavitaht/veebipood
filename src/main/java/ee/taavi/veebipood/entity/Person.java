@@ -11,14 +11,15 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Product {
+public class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
-    private String description;
-    private double price;
-    private int quantity;
-    @ManyToOne
-    private Category category;
+    private String firstName;
+    private String lastName;
+
+    @Column(unique = true)
+    private String email;
+
+    private String password;
 }
