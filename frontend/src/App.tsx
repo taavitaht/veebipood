@@ -1,80 +1,28 @@
-import { useState } from 'react'
 import './App.css'
+import { Route, Routes } from 'react-router-dom';
+import HomePage from './pages/HomePage';
+import Cart from './pages/Cart';
+import AddProduct from './pages/AddProduct';
+import Menu from './components/Menu';
+import NotFound from './pages/NotFound';
+import Signup from './pages/Signup';
+import Login from './pages/Login';
 
 function App() {
-  const dbProducts = [
-    {
-        "id": 5,
-        "name": "Sprite",
-        "description": "Karastusjook",
-        "price": 1.2,
-        "quantity": 100,
-        "category": null
-    },
-    {
-        "id": 2,
-        "name": "Sprite",
-        "description": "Karastusjook",
-        "price": 1.2,
-        "quantity": 100,
-        "category": null
-    },
-    {
-        "id": 3,
-        "name": "Fanta",
-        "description": "Karastusjook",
-        "price": 2.4,
-        "quantity": 100,
-        "category": null
-    },
-    {
-        "id": 6,
-        "name": "Pepsi",
-        "description": "Karastusjook",
-        "price": 1.2,
-        "quantity": 100,
-        "category": null
-    },
-    {
-        "id": 7,
-        "name": "iPhone",
-        "description": "Nutitelefon",
-        "price": 1600.0,
-        "quantity": 100,
-        "category": {
-            "id": 4,
-            "name": "alcohol"
-        }
-    },
-    {
-        "id": 8,
-        "name": "Nokia",
-        "description": "Nutitelefon",
-        "price": 1600.0,
-        "quantity": 100,
-        "category": {
-            "id": 5,
-            "name": "clothing"
-        }
-    },
-    {
-        "id": 9,
-        "name": "SonyEricsson",
-        "description": "Nutitelefon",
-        "price": 1000.0,
-        "quantity": 100,
-        "category": {
-            "id": 3,
-            "name": "electronics"
-        }
-    }
-]
-
-  const [products, setProducts] = useState(dbProducts)
 
   return (
     <>
-      {products.map(product => <div>{product.name}</div>)}
+      <Menu />
+
+        <Routes>
+          <Route path = "/" element={ <HomePage />} />
+          <Route path = "/ostukorv" element={<Cart />} />
+          <Route path = "/lisa-toode" element={<AddProduct />} />
+          <Route path = "/login" element={<Login />} />
+          <Route path = "/signup" element={<Signup />} />
+          
+          <Route path = "/*" element={<NotFound />} />
+        </Routes>
     </>
   )
 }
