@@ -3,6 +3,8 @@ package ee.taavi.veebipood.controller;
 import ee.taavi.veebipood.entity.Product;
 import ee.taavi.veebipood.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,10 +16,10 @@ public class ProductController {
     @Autowired // Dependency Injection
     private ProductRepository productRepository;
 
-    // localhost:8080/product
+    // localhost:8080/product?page=0&size=2&sort=price,desc
     @GetMapping("products")
-    public List<Product> getProducts(){
-        return productRepository.findAll();
+    public Page<Product> getProducts(Pageable pageable){
+        return productRepository.findAll(pageable);
     }
 
     // localhost:8080/products

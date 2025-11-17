@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import type { Category } from "../models/Category";
 import type { Product } from "../models/Product";
+import { ToastContainer, toast } from "react-toastify";
 
 // rfce
 function AddProduct() {
@@ -10,7 +11,7 @@ function AddProduct() {
         "description": "",
         "quantity": 0,
         "category": {
-            "id": 0,
+            "id": 1,
             "name": ""
         }
     });
@@ -32,6 +33,15 @@ function AddProduct() {
 
       // function add() {}
       const add = async() => {
+        if (product.name === ""){
+            toast.error("Cannot add without name");
+            return;
+        }
+        if (product.price <= 0){
+            toast.error("Price cannot be 0 or negative");
+            return;
+        }
+        
         try {
             const res = await fetch("http://localhost:8080/products", {
                 method: "POST",
@@ -41,10 +51,13 @@ function AddProduct() {
                 }
             });
             const json = await res.json();
-            console.log(json);
-            alert("Toode lisatud!");
+            if (json.message && json.timestamp && json.status){
+              toast.error(json.message);
+            } else {
+              toast.success("Toode lisatud!");
+            }
           } catch (error) {
-            console.log(error)
+            toast.error(String(error));
           }
       }
       
@@ -63,11 +76,13 @@ function AddProduct() {
         <select onChange={(e) => setProduct({...product, "category": {"id": Number(e.target.value), "name": ""}})}>
         {
             categories.map(category =>                 
-                <option value={category.id}>{category.name}</option>                
+                <option key={category.id} value={category.id}>{category.name}</option>                
             )
         }
         </select><br />
         <button onClick={add}>Add</button>
+
+        <ToastContainer />
     </div>
   )
 }
