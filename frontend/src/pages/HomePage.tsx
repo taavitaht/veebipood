@@ -1,5 +1,7 @@
-import { useEffect, useState, type ChangeEvent } from 'react'
+import { useContext, useEffect, useState, type ChangeEvent } from 'react'
 import { type Product } from '../models/Product'
+import type { OrderRow } from '../models/OrderRow';
+import { CartSumContext } from '../context/CartSumContext';
 // rfce
 // rfc rafce rafc 
 function HomePage() {
@@ -8,6 +10,7 @@ function HomePage() {
   const [page, setPage] = useState(0);
   const [size, setSize] = useState(2);
   const [sort, setSort] = useState("id,asc");
+  const {cartSum, setCartSum} = useContext(CartSumContext);
 
   //uef variant 1: fetch().then().then()
   /*
@@ -39,9 +42,15 @@ function HomePage() {
   }
 
   function addToCart(product: Product){
-    const cartLS = JSON.parse(localStorage.getItem("cart") || "[]");
-    cartLS.push(product);
+    const cartLS: OrderRow[] = JSON.parse(localStorage.getItem("cart") || "[]");
+    const index = cartLS.findIndex(orderRow => orderRow.product.id === product.id);
+    if (index >= 0){
+      cartLS[index].quantity++;
+    } else {
+      cartLS.push({"product":product, "quantity": 1});
+    }
     localStorage.setItem("cart", JSON.stringify(cartLS));
+    setCartSum(cartSum + product.price);
   }
 
   return (

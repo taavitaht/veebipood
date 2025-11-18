@@ -5,10 +5,13 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import english from '../assets/english.png';
 import estonian from '../assets/estonian.png';
+import { CartSumContext } from '../context/CartSumContext';
+import { useContext } from 'react';
 
 
 function Menu() {
   const { t, i18n } = useTranslation();
+  const { cartSum } = useContext(CartSumContext);
 
   function updateLanguage(newLang: string){
     i18n.changeLanguage(newLang);
@@ -30,6 +33,7 @@ function Menu() {
             <Nav.Link as={Link} to="/login">{t('menu.login')}</Nav.Link>
             <Nav.Link as={Link} to="/signup">{t('menu.signup')}</Nav.Link>
           </Nav>
+          <span>{cartSum.toFixed(2)}€</span>
           <img src={english} className="icon" onClick={() => updateLanguage("en")} alt="" />
           <img src={estonian} className="icon" onClick={() => updateLanguage("et")} alt="" />
         </Navbar.Collapse>

@@ -1,12 +1,15 @@
 package ee.taavi.veebipood.controller;
 
+import ee.taavi.veebipood.dto.PersonDTO;
 import ee.taavi.veebipood.entity.Person;
 import ee.taavi.veebipood.repository.PersonRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin("http://localhost:5173")
 @RestController
 public class PersonController {
 
@@ -16,6 +19,12 @@ public class PersonController {
     @GetMapping("persons")
     public List<Person> getPersons(){
         return personRepository.findAll();
+    }
+
+    @GetMapping("public-persons")
+    public List<PersonDTO> getPublicPersons(){
+        ModelMapper mapper = new ModelMapper();
+        return List.of(mapper.map(personRepository.findAll(), PersonDTO[].class));
     }
 
     @PostMapping("signup")

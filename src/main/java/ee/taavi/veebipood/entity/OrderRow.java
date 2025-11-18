@@ -14,18 +14,15 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "orders")
-public class Order {
+public class OrderRow {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Date created;
-    private double total;
-
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<OrderRow> orderRows;
-
+    private int quantity;
+    // @ManyToMany - ei sobi, peaks olema List<Product>
+    // @ManyToOne - kellegi teise order rowl voib olla sama toode
+    // @OneToMany - ei sobi, peaks olema List<Product>
+    // @OneToOne - kelelgi teisel ei tohi olla
     @ManyToOne
-    private Person person;
+    private Product product;
 }
-

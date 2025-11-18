@@ -1,6 +1,7 @@
 package ee.taavi.veebipood.service;
 
 import ee.taavi.veebipood.entity.Order;
+import ee.taavi.veebipood.entity.OrderRow;
 import ee.taavi.veebipood.entity.Person;
 import ee.taavi.veebipood.entity.Product;
 import ee.taavi.veebipood.repository.OrderRepository;
@@ -20,15 +21,15 @@ public class OrderService {
     @Autowired
     private OrderRepository orderRepository;
 
-    public Order saveOrder(List<Product> products, Long personId) {
+    public Order saveOrder(List<OrderRow> orderRows, Long personId) {
         Order order = new Order();
         order.setCreated(new Date());
-        order.setProducts(products);
+        order.setOrderRows(orderRows);
 
         double sum = 0;
-        for (Product product : products){
-            Product dbProduct = productRepository.findById(product.getId()).orElseThrow();
-            sum += dbProduct.getPrice();
+        for (OrderRow orderRow : orderRows){
+            Product dbProduct = productRepository.findById(orderRow.getProduct().getId()).orElseThrow();
+            sum += dbProduct.getPrice() * orderRow.getQuantity();
         }
         order.setTotal(sum);
 
