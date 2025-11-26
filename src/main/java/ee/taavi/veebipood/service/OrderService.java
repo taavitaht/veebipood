@@ -39,4 +39,20 @@ public class OrderService {
 
         return orderRepository.save(order);
     }
+
+    public String makePayment(Long id, double total) {
+        /*
+        {
+            "account_name": "EUR3D1",                   konto nimi, kuhu raha läheb
+                "nonce": "a16a5784sdafb51fkm",          turvaelement, peab olema unikaalne igas päringus
+                "timestamp": "2025-11-26T09:59:32Z",    turvaelement, ajaempel
+                "amount": 123.45,                       summa, max. 7000€
+                "order_reference": "asdf789",           tellimuse number, kui on makstud siis teist korda ei saa maksta
+                "customer_url": "https://err.ee",       kuhu suunatakse tagasi, ei saa olla localhost
+                "api_username": "e36eb40f5ec87fa2"      kasutajanimi, peab ühtima Authorization kasutajanimega
+        }
+        */
+
+        return "";
+    }
 }

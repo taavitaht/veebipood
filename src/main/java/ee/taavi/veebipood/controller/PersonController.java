@@ -16,6 +16,9 @@ public class PersonController {
     @Autowired
     private PersonRepository personRepository;
 
+    @Autowired
+    ModelMapper modelMapper;
+
     @GetMapping("persons")
     public List<Person> getPersons(){
         return personRepository.findAll();
@@ -23,8 +26,7 @@ public class PersonController {
 
     @GetMapping("public-persons")
     public List<PersonDTO> getPublicPersons(){
-        ModelMapper mapper = new ModelMapper();
-        return List.of(mapper.map(personRepository.findAll(), PersonDTO[].class));
+        return List.of(modelMapper.map(personRepository.findAll(), PersonDTO[].class));
     }
 
     @PostMapping("signup")
