@@ -3,6 +3,7 @@ package ee.taavi.veebipood.controller;
 import ee.taavi.veebipood.dto.PersonDTO;
 import ee.taavi.veebipood.entity.Person;
 import ee.taavi.veebipood.repository.PersonRepository;
+import ee.taavi.veebipood.service.JwtService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,9 @@ public class PersonController {
 
     @Autowired
     ModelMapper modelMapper;
+
+    @Autowired
+    private JwtService jwtService;
 
     @GetMapping("persons")
     public List<Person> getPersons(){
@@ -55,5 +59,10 @@ public class PersonController {
             throw new RuntimeException("Password cannot be empty");
         }
         return personRepository.save(person);
+    }
+
+    @PostMapping("login")
+    public String login(@RequestBody Person person) {
+        return jwtService.generateToken(person.getId());
     }
 }

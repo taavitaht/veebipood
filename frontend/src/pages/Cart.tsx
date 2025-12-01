@@ -55,8 +55,8 @@ function Cart() {
         "Content-Type": "application/json"
       }
     })
-      .then(res => res.json())
-      .then(json => console.log(json));
+      .then(res => res.text())
+      .then(json => window.location.href = json);
   }
 
   // localStorage.setItem("VÕTI", "väärtus stringi kujul") --> panen

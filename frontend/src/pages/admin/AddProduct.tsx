@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import type { Category } from "../models/Category";
-import type { Product } from "../models/Product";
+import type { Category } from "../../models/Category";
+import type { Product } from "../../models/Product";
 import { ToastContainer, toast } from "react-toastify";
 
 // rfce
