@@ -7,15 +7,17 @@ import Menu from './components/Menu';
 import NotFound from './pages/NotFound';
 import Signup from './pages/auth/Signup';
 import Login from './pages/auth/Login';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import ManageProducts from './pages/admin/ManageProducts';
 import ManageCategories from './pages/admin/ManageCategories';
 import ManageAdmins from './pages/admin/ManageAdmins';
 import Profile from './pages/auth/Profile';
 import MyOrders from './pages/auth/MyOrders';
+import { AuthContext } from './context/AuthContext';
 
 function App() {
   const [dark, setDark] = useState(localStorage.getItem("isDarkTheme") === "true");
+  const { loggedIn, isAdmin } = useContext(AuthContext);
 
   function updateMode(isDark: boolean) {
     setDark(isDark);
@@ -32,17 +34,25 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/ostukorv" element={<Cart />} />
 
+        {isAdmin &&
+          <>
+            <Route path="/lisa-toode" element={<AddProduct />} />
+            <Route path="/halda-admine" element={<ManageAdmins />} />
+            <Route path="/halda-kategooriaid" element={<ManageCategories />} />
+            <Route path="/halda-tooteid" element={<ManageProducts />} />
+          </>}
 
-        <Route path="/lisa-toode" element={<AddProduct />} />
-        <Route path="/halda-admine" element={<ManageAdmins />} />
-        <Route path="/halda-kategooriaid" element={<ManageCategories />} />
-        <Route path="/halda-tooteid" element={<ManageProducts />} />
+        {loggedIn ?
+          <>
+            <Route path="/orders" element={<MyOrders />} />
+            <Route path="/profile" element={<Profile />} />
+          </> :
+          <>
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+          </>
+        }
 
-
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/orders" element={<MyOrders />} />
-        <Route path="/profile" element={<Profile />} />
 
         <Route path="/*" element={<NotFound />} />
       </Routes>

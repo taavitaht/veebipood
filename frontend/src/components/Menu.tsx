@@ -7,17 +7,23 @@ import english from '../assets/english.png';
 import estonian from '../assets/estonian.png';
 import { CartSumContext } from '../context/CartSumContext';
 import { useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
 
 
 function Menu() {
   const { t, i18n } = useTranslation();
   const { cartSum } = useContext(CartSumContext);
+  const { loggedIn, logout } = useContext(AuthContext);
 
-  function updateLanguage(newLang: string){
+  function updateLanguage(newLang: string) {
     i18n.changeLanguage(newLang);
     localStorage.setItem("language", newLang);
   }
 
+  function logoutHandler() {
+    logout();
+  }
+  
   return (
     <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
       <Container>
@@ -26,19 +32,26 @@ function Menu() {
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
             <Nav.Link as={Link} to="/ostukorv">{t('menu.cart')}</Nav.Link>
-            <Nav.Link as={Link} to="/lisa-toode">{t('menu.add-product')}</Nav.Link>
-            
+            {loggedIn && <Nav.Link as={Link} to="/lisa-toode">{t('menu.add-product')}</Nav.Link>}
+
           </Nav>
           <Nav>
-            <Nav.Link as={Link} to="/login">{t('menu.login')}</Nav.Link>
-            <Nav.Link as={Link} to="/signup">{t('menu.signup')}</Nav.Link>
+            {loggedIn ?
+              <>
+                <Nav.Link as={Link} to="/profile">{t('menu.profile')}</Nav.Link>
+                <Nav.Link onClick={logoutHandler}>{t('menu.logout')}</Nav.Link>
+              </> :
+              <>
+                <Nav.Link as={Link} to="/login">{t('menu.login')}</Nav.Link>
+                <Nav.Link as={Link} to="/signup">{t('menu.signup')}</Nav.Link>
+              </>}
           </Nav>
           <span>{cartSum.toFixed(2)}€</span>
           <img src={english} className="icon" onClick={() => updateLanguage("en")} alt="" />
           <img src={estonian} className="icon" onClick={() => updateLanguage("et")} alt="" />
         </Navbar.Collapse>
       </Container>
-      
+
     </Navbar>
   );
 }

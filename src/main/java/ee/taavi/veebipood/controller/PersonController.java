@@ -2,6 +2,7 @@ package ee.taavi.veebipood.controller;
 
 import ee.taavi.veebipood.dto.PersonDTO;
 import ee.taavi.veebipood.entity.Person;
+import ee.taavi.veebipood.model.LoginCredentials;
 import ee.taavi.veebipood.repository.PersonRepository;
 import ee.taavi.veebipood.service.JwtService;
 import org.modelmapper.ModelMapper;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin("http://localhost:5173")
+//@CrossOrigin("http://localhost:5173")
 @RestController
 public class PersonController {
 
@@ -62,7 +63,11 @@ public class PersonController {
     }
 
     @PostMapping("login")
-    public String login(@RequestBody Person person) {
+    public String login(@RequestBody LoginCredentials loginCredentials) {
+        Person person = personRepository.findByEmail(loginCredentials.getEmail());
+        if (person == null){
+            throw new RuntimeException("Invalid email");
+        }
         return jwtService.generateToken(person.getId());
     }
 }

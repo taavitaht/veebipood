@@ -19,7 +19,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-@CrossOrigin("http://localhost:5173")
+//@CrossOrigin("http://localhost:5173")
 @RestController
 public class OrderController {
 

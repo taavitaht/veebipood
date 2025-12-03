@@ -6,6 +6,7 @@ import './i18n';
 import App from './App.tsx'
 import { BrowserRouter } from 'react-router-dom'
 import { CartSumContextProvider } from './context/CartSumContextProvider.tsx';
+import { AuthContextProvider } from './context/AuthContextProvider.tsx';
 
 // Navigeerimiseks (URL vahetamiseks)
 // 1. npm i react-router-dom (vajalikud koodifailid panema node_modules kausta)
@@ -17,7 +18,9 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
       <CartSumContextProvider>
-        <App />
+        <AuthContextProvider>
+          <App />
+        </AuthContextProvider>
       </CartSumContextProvider>
     </BrowserRouter>
   </StrictMode>,
