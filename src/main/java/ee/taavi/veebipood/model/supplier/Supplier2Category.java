@@ -1,4 +1,4 @@
-package ee.taavi.veebipood.model;
+package ee.taavi.veebipood.model.supplier;
 
 import lombok.Data;
 import java.util.Date;

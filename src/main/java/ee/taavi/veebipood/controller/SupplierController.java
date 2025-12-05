@@ -1,9 +1,9 @@
 package ee.taavi.veebipood.controller;
 
-import ee.taavi.veebipood.model.Supplier1;
-import ee.taavi.veebipood.model.Supplier2;
-import ee.taavi.veebipood.model.Supplier3;
-import ee.taavi.veebipood.model.Supplier3Book;
+import ee.taavi.veebipood.model.supplier.Supplier1;
+import ee.taavi.veebipood.model.supplier.Supplier2;
+import ee.taavi.veebipood.model.supplier.Supplier3;
+import ee.taavi.veebipood.model.supplier.Supplier3Book;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.GetMapping;
