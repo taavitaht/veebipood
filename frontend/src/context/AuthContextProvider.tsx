@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
     const [loggedIn, setLoggedIn] = useState(sessionStorage.getItem("token") !== null);
     const [person, setPerson] = useState({});
-    const [isAdmin, setAdmin] = useState(false);
+    const [isAdmin, setAdmin] = useState(true);
     const navigate = useNavigate();
 
     function login(token: string){

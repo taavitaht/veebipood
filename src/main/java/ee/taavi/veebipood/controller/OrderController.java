@@ -4,9 +4,12 @@ import ee.taavi.veebipood.entity.Order;
 import ee.taavi.veebipood.entity.OrderRow;
 import ee.taavi.veebipood.model.ParcelMachine;
 import ee.taavi.veebipood.repository.OrderRepository;
+import ee.taavi.veebipood.repository.PersonRepository;
 import ee.taavi.veebipood.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -26,15 +29,23 @@ public class OrderController {
     @Autowired
     private RestTemplate restTemplate;
 
+    //@Autowired
+    //private PersonRepository personRepository;
+
     @GetMapping("orders")
     public List<Order> getOrders(){
         return orderRepository.findAll();
     }
 
-    @PostMapping("order/{personId}")
-    public String createOrder(@RequestBody List<OrderRow> orderRows, @PathVariable("personId") Long personId){
+    @GetMapping("my-orders")
+    public List<Order> getPersonOrders(){
+        Long personId = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+        return orderRepository.findByPerson_Id(personId);
+    }
 
-        //return orderService.saveOrder(orderRows, personId);
+    @PostMapping("order")
+    public String createOrder(@RequestBody List<OrderRow> orderRows){
+        Long personId = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
         Order order = orderService.saveOrder(orderRows, personId);
         return orderService.makePayment(order.getId(), order.getTotal());
     }

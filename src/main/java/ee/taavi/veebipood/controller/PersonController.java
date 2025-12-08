@@ -4,6 +4,7 @@ import ee.taavi.veebipood.dto.PersonDTO;
 import ee.taavi.veebipood.entity.Person;
 import ee.taavi.veebipood.model.AuthToken;
 import ee.taavi.veebipood.model.LoginCredentials;
+import ee.taavi.veebipood.model.PasswordCredentials;
 import ee.taavi.veebipood.repository.PersonRepository;
 import ee.taavi.veebipood.service.JwtService;
 import ee.taavi.veebipood.service.PersonService;
@@ -29,38 +30,40 @@ public class PersonController {
     private PersonService personService;
 
     @GetMapping("persons")
-    public List<Person> getPersons(){
+    public List<Person> getPersons() {
         return personRepository.findAll();
     }
 
     @GetMapping("public-persons")
-    public List<PersonDTO> getPublicPersons(){
+    public List<PersonDTO> getPublicPersons() {
         return List.of(modelMapper.map(personRepository.findAll(), PersonDTO[].class));
     }
 
     @PostMapping("signup")
-    public Person signup(@RequestBody Person person){
+    public Person signup(@RequestBody Person person) {
         return personService.savePerson(person);
     }
 
 
     @PutMapping("persons")
-    public Person editPerson(@RequestBody Person person){
-        if(person.getId() == null){
+    public Person editPerson(@RequestBody Person person) {
+        if (person.getId() == null) {
             throw new RuntimeException("Cannot edit when id is missing");
         }
 
-        if(person.getEmail() == null || person.getEmail().isBlank()){
+        if (person.getEmail() == null || person.getEmail().isBlank()) {
             throw new RuntimeException("Email cannot be empty");
         }
-        if(!Validations.validateEmail(person.getEmail())){
+        if (!Validations.validateEmail(person.getEmail())) {
             throw new RuntimeException("Email is not valid");
         }
+
+        Person existingPerson = personRepository.findById(person.getId()).orElseThrow();
         Person dbPerson = personRepository.findByEmail(person.getEmail());
-        if(dbPerson != null){
+        if (!existingPerson.getEmail().equals(person.getEmail()) && dbPerson != null) {
             throw new RuntimeException("Email already taken");
         }
-
+        person.setPassword(existingPerson.getPassword());
 //        if(person.getPassword() == null || person.getPassword().isBlank()){
 //            throw new RuntimeException("Password cannot be empty");
 //        }
@@ -75,8 +78,22 @@ public class PersonController {
     }
 
     @GetMapping("person")
-    public Person getPerson(){
+    public Person getPerson() {
         Long personId = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
         return personRepository.findById(personId).orElseThrow();
+    }
+
+    @PatchMapping("update-password")
+    public Person updatePassword(@RequestBody PasswordCredentials passwordCredentials) {
+        if (passwordCredentials.getId() == null) {
+            throw new RuntimeException("Cannot edit when id is missing");
+        }
+        if (passwordCredentials.getOldPassword() == null) {
+            throw new RuntimeException("Cannot edit when old password is missing");
+        }
+        if (passwordCredentials.getNewPassword() == null) {
+            throw new RuntimeException("Cannot edit when new password is missing");
+        }
+        return personService.changePassword(passwordCredentials);
     }
 }

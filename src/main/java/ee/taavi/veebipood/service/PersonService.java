@@ -2,6 +2,7 @@ package ee.taavi.veebipood.service;
 
 import ee.taavi.veebipood.entity.Person;
 import ee.taavi.veebipood.model.LoginCredentials;
+import ee.taavi.veebipood.model.PasswordCredentials;
 import ee.taavi.veebipood.repository.PersonRepository;
 import ee.taavi.veebipood.util.Validations;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,5 +59,14 @@ public class PersonService {
         }
 
         return jwtService.generateToken(person.getId());
+    }
+
+    public Person changePassword(PasswordCredentials passwordCredentials) {
+        Person existingPerson = personRepository.findById(passwordCredentials.getId()).orElseThrow();
+        if(!bCryptPasswordEncoder.matches(passwordCredentials.getOldPassword(), existingPerson.getPassword())){
+            throw new RuntimeException("Old password doesn't match");
+        }
+        existingPerson.setPassword(bCryptPasswordEncoder.encode(passwordCredentials.getNewPassword()));
+        return personRepository.save(existingPerson);
     }
 }

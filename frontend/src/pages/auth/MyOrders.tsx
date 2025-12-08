@@ -1,7 +1,32 @@
+import useLoadItems from "../../hooks/useLoadItems";
+import type { Order } from "../../models/Order";
 
 function MyOrders() {
+  // const [orders, setOrders] = useState([]);
+  const orders: Order[] = useLoadItems("/my-orders", true);
+
+  if (orders.length === 0) {
+    return <div>Veel pole tellimusi tehtud</div>
+  }
+
   return (
-    <div>MyOrders</div>
+    <div>
+      {orders.map(order =>
+        <div key={order.id}>
+          <div>{order.id}</div>
+          <div>{order.created.toString()}</div>
+          <div>{order.total}</div>
+          <div>{order.orderRows.map(row =>
+            <span key={row.id}>
+              <span>| {row.product.name}</span>
+              <span>{row.quantity} tk | </span>              
+            </span>
+          )}
+          <br/><br/>
+          </div>
+        </div>
+      )}
+    </div>
   )
 }
 

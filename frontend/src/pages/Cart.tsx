@@ -48,11 +48,12 @@ function Cart() {
   }
 
   function pay(){
-    fetch("http://localhost:8080/order/1", {
+    fetch("http://localhost:8080/order", {
       method: "POST",
       body: JSON.stringify(orderRows),
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + sessionStorage.getItem("token")
       }
     })
       .then(res => res.text())

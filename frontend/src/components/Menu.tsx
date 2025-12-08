@@ -38,6 +38,7 @@ function Menu() {
           <Nav>
             {loggedIn ?
               <>
+                <Nav.Link as={Link} to="/orders">{t('menu.orders')}</Nav.Link>
                 <Nav.Link as={Link} to="/profile">{t('menu.profile')}</Nav.Link>
                 <Nav.Link onClick={logoutHandler}>{t('menu.logout')}</Nav.Link>
               </> :

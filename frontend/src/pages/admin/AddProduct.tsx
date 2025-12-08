@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { Category } from "../../models/Category";
 import type { Product } from "../../models/Product";
 import { ToastContainer, toast } from "react-toastify";
+import useFetch from "../../hooks/useFetch";
+import useLoadItems from "../../hooks/useLoadItems";
 
 
 // rfce
@@ -17,20 +19,8 @@ function AddProduct() {
     }
   });
 
-  const [categories, setCategories] = useState<Category[]>([]);
-
-  useEffect(() => {
-    const load = async () => {
-      try {
-        const res = await fetch("http://localhost:8080/categories");
-        const json = await res.json();
-        setCategories(json);
-      } catch (error) {
-        console.log(error)
-      }
-    }
-    load();
-  }, []);
+  const  backendQuery = useFetch();
+  const categories: Category[] = useLoadItems("/categories", false);
 
   // function add() {}
   const add = async () => {
@@ -43,23 +33,7 @@ function AddProduct() {
       return;
     }
 
-    try {
-      const res = await fetch("http://localhost:8080/products", {
-        method: "POST",
-        body: JSON.stringify(product),
-        headers: {
-          "Content-Type": "application/json"
-        }
-      });
-      const json = await res.json();
-      if (json.message && json.timestamp && json.status) {
-        toast.error(json.message);
-      } else {
-        toast.success("Toode lisatud!");
-      }
-    } catch (error) {
-      toast.error(String(error));
-    }
+    backendQuery("/products", "POST", product);
   }
 
   return (

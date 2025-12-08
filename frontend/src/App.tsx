@@ -40,6 +40,7 @@ function App() {
             <Route path="/halda-admine" element={<ManageAdmins />} />
             <Route path="/halda-kategooriaid" element={<ManageCategories />} />
             <Route path="/halda-tooteid" element={<ManageProducts />} />
+            {/* <Route path="/all-orders" element={<Orders />} /> */}
           </>}
 
         {loggedIn ?
