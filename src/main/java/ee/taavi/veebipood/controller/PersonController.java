@@ -2,6 +2,7 @@ package ee.taavi.veebipood.controller;
 
 import ee.taavi.veebipood.dto.PersonDTO;
 import ee.taavi.veebipood.entity.Person;
+import ee.taavi.veebipood.entity.PersonRole;
 import ee.taavi.veebipood.model.AuthToken;
 import ee.taavi.veebipood.model.LoginCredentials;
 import ee.taavi.veebipood.model.PasswordCredentials;
@@ -31,7 +32,7 @@ public class PersonController {
 
     @GetMapping("persons")
     public List<Person> getPersons() {
-        return personRepository.findAll();
+        return personRepository.findByOrderByIdAsc();
     }
 
     @GetMapping("public-persons")
@@ -95,5 +96,17 @@ public class PersonController {
             throw new RuntimeException("Cannot edit when new password is missing");
         }
         return personService.changePassword(passwordCredentials);
+    }
+
+    @PatchMapping("/change-admin")
+    public List<Person> changeAdmin(@RequestParam Long id){
+        Person person = personRepository.findById(id).orElseThrow();
+        if(person.getRole().equals(PersonRole.CUSTOMER)){
+            person.setRole(PersonRole.ADMIN);
+        } else {
+            person.setRole(PersonRole.CUSTOMER);
+        }
+        personRepository.save(person);
+        return personRepository.findByOrderByIdAsc();
     }
 }

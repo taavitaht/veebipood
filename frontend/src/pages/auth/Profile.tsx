@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 // import { useTranslation } from "react-i18next";
 import { ToastContainer } from "react-toastify";
 import useFetch from "../../hooks/useFetch";
+import type { Person } from "../../models/Person";
 
 
 function Profile() {
-
-  const [person, setPerson] = useState({ email: "", password: "", firstName: "", lastName: "" });
+  const [person, setPerson] = useState<Person>({ email: "", password: "", firstName: "", lastName: "", role: "" });
   const [passwordCredentials, setPasswordCredentials] = useState({});
   // const { t } = useTranslation();
   const backendQuery = useFetch();
@@ -21,7 +21,7 @@ function Profile() {
         });
         const json = await res.json();
         setPerson(json);
-        setPasswordCredentials({ "id": json.id })
+        setPasswordCredentials({ "id": json.id });
         console.log(json);
       } catch (error) {
         console.log(error)

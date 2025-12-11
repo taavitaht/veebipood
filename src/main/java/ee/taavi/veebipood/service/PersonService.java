@@ -58,7 +58,7 @@ public class PersonService {
             throw new RuntimeException("Invalid password");
         }
 
-        return jwtService.generateToken(person.getId());
+        return jwtService.generateToken(person);
     }
 
     public Person changePassword(PasswordCredentials passwordCredentials) {

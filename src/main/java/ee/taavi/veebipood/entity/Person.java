@@ -22,4 +22,5 @@ public class Person {
     private String email;
 
     private String password;
+    private PersonRole role;
 }

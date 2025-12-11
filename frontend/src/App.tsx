@@ -17,7 +17,7 @@ import { AuthContext } from './context/AuthContext';
 
 function App() {
   const [dark, setDark] = useState(localStorage.getItem("isDarkTheme") === "true");
-  const { loggedIn, isAdmin } = useContext(AuthContext);
+  const { loggedIn, role } = useContext(AuthContext);
 
   function updateMode(isDark: boolean) {
     setDark(isDark);
@@ -34,13 +34,17 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/ostukorv" element={<Cart />} />
 
-        {isAdmin &&
+        {loggedIn && (role === "ADMIN" || role === "SUPERADMIN") &&
           <>
             <Route path="/lisa-toode" element={<AddProduct />} />
-            <Route path="/halda-admine" element={<ManageAdmins />} />
             <Route path="/halda-kategooriaid" element={<ManageCategories />} />
             <Route path="/halda-tooteid" element={<ManageProducts />} />
             {/* <Route path="/all-orders" element={<Orders />} /> */}
+          </>}
+
+        {loggedIn && role === "SUPERADMIN" &&
+          <>
+            <Route path="/halda-admine" element={<ManageAdmins />} />
           </>}
 
         {loggedIn ?

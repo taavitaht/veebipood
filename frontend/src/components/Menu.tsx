@@ -13,7 +13,7 @@ import { AuthContext } from '../context/AuthContext';
 function Menu() {
   const { t, i18n } = useTranslation();
   const { cartSum } = useContext(CartSumContext);
-  const { loggedIn, logout } = useContext(AuthContext);
+  const { role, loggedIn, logout } = useContext(AuthContext);
 
   function updateLanguage(newLang: string) {
     i18n.changeLanguage(newLang);
@@ -23,7 +23,7 @@ function Menu() {
   function logoutHandler() {
     logout();
   }
-  
+
   return (
     <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
       <Container>
@@ -32,8 +32,17 @@ function Menu() {
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
             <Nav.Link as={Link} to="/ostukorv">{t('menu.cart')}</Nav.Link>
-            {loggedIn && <Nav.Link as={Link} to="/lisa-toode">{t('menu.add-product')}</Nav.Link>}
 
+            {loggedIn && (role === "ADMIN" || role === "SUPERADMIN") &&
+              <>
+                <Nav.Link as={Link} to="/lisa-toode">{t('menu.add-product')}</Nav.Link>
+              </>
+            }
+            {loggedIn && role === "SUPERADMIN" &&
+              <>
+                <Nav.Link as={Link} to="/halda-admine">{t('menu.manage-admins')}</Nav.Link>
+              </>
+            }
           </Nav>
           <Nav>
             {loggedIn ?

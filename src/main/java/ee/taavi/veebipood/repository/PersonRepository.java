@@ -3,7 +3,12 @@ package ee.taavi.veebipood.repository;
 import ee.taavi.veebipood.entity.Person;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface PersonRepository extends JpaRepository<Person, Long> {
 
     Person findByEmail(String email);
+
+    List<Person> findByOrderByIdAsc();
+
 }
