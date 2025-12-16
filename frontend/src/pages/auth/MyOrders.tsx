@@ -3,7 +3,11 @@ import type { Order } from "../../models/Order";
 
 function MyOrders() {
   // const [orders, setOrders] = useState([]);
-  const orders: Order[] = useLoadItems("/my-orders", true);
+  const [orders, loading]: [Order[], boolean] = useLoadItems("/my-orders", true);
+
+  if (loading) {
+    return <div>Loading...</div>
+  }
 
   if (orders.length === 0) {
     return <div>Veel pole tellimusi tehtud</div>

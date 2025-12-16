@@ -20,6 +20,7 @@ import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 @Service
 public class OrderService {
@@ -33,14 +34,18 @@ public class OrderService {
     @Autowired
     private RestTemplate restTemplate;
 
-    public Order saveOrder(List<OrderRow> orderRows, Long personId) {
+    @Autowired
+    private ProductCacheService productCacheService;
+
+    public Order saveOrder(List<OrderRow> orderRows, Long personId) throws ExecutionException {
         Order order = new Order();
         order.setCreated(new Date());
         order.setOrderRows(orderRows);
 
         double sum = 0;
         for (OrderRow orderRow : orderRows){
-            Product dbProduct = productRepository.findById(orderRow.getProduct().getId()).orElseThrow();
+            // Product dbProduct = productRepository.findById(orderRow.getProduct().getId()).orElseThrow();
+            Product dbProduct = productCacheService.getProduct(orderRow.getProduct().getId());
             sum += dbProduct.getPrice() * orderRow.getQuantity();
         }
         order.setTotal(sum);

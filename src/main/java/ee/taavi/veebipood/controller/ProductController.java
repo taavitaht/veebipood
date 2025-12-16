@@ -2,12 +2,14 @@ package ee.taavi.veebipood.controller;
 
 import ee.taavi.veebipood.entity.Product;
 import ee.taavi.veebipood.repository.ProductRepository;
+import ee.taavi.veebipood.service.ProductCacheService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 //@CrossOrigin("http://localhost:5173")
 @RestController
@@ -15,6 +17,9 @@ public class ProductController {
 
     @Autowired // Dependency Injection
     private ProductRepository productRepository;
+
+    @Autowired
+    private ProductCacheService productCacheService;
 
     // localhost:8080/product?page=0&size=2&sort=price,desc
     @GetMapping("products")
@@ -43,6 +48,7 @@ public class ProductController {
     @DeleteMapping("products")
     public List<Product> deleteProduct(@RequestParam Long id){
         productRepository.deleteById(id);
+        productCacheService.removeProduct(id);
         return productRepository.findAll();
     }
 
@@ -51,13 +57,15 @@ public class ProductController {
     @DeleteMapping("products2/{id}")
     public List<Product> deleteProduct2(@PathVariable Long id){
         productRepository.deleteById(id);
+        productCacheService.removeProduct(id);
         return productRepository.findAll();
     }
 
     // Get 1 product
     @GetMapping("products/{id}")
-    public Product getProduct(@PathVariable Long id){
-        return productRepository.findById(id).orElseThrow();
+    public Product getProduct(@PathVariable Long id) throws ExecutionException {
+        // return productRepository.findById(id).orElseThrow();
+        return productCacheService.getProduct(id);
     }
 
     // Edit product
@@ -74,6 +82,7 @@ public class ProductController {
         }
 
         productRepository.save(product);
+        productCacheService.putProduct(product);
         return productRepository.findAll();
     }
 }

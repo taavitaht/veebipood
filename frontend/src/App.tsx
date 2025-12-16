@@ -14,6 +14,7 @@ import ManageAdmins from './pages/admin/ManageAdmins';
 import Profile from './pages/auth/Profile';
 import MyOrders from './pages/auth/MyOrders';
 import { AuthContext } from './context/AuthContext';
+import RequireAuth from './components/RequireAuth';
 
 function App() {
   const [dark, setDark] = useState(localStorage.getItem("isDarkTheme") === "true");
@@ -47,16 +48,17 @@ function App() {
             <Route path="/halda-admine" element={<ManageAdmins />} />
           </>}
 
-        {loggedIn ?
-          <>
-            <Route path="/orders" element={<MyOrders />} />
-            <Route path="/profile" element={<Profile />} />
-          </> :
-          <>
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-          </>
-        }
+
+        <Route element={<RequireAuth />}>
+          <Route path="/orders" element={<MyOrders />} />
+          <Route path="/profile" element={<Profile />} />
+        </Route>
+
+        <>
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+        </>
+
 
 
         <Route path="/*" element={<NotFound />} />

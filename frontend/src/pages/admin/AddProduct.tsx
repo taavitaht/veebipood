@@ -33,7 +33,7 @@ function AddProduct() {
       return;
     }
 
-    backendQuery("/products", "POST", product);
+    backendQuery("/products", "POST", product, "added-product");
   }
 
   return (

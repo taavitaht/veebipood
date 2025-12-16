@@ -21,6 +21,7 @@ public class Order {
     private Long id;
     private Date created;
     private double total;
+    private String parcelMachine;
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<OrderRow> orderRows;

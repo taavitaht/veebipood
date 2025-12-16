@@ -7,9 +7,11 @@ import { CartSumContext } from '../context/CartSumContext';
 function HomePage() {
     //const dbProducts: Product[] = [];
   const [products, setProducts] = useState<Product[]>([]);
+  const [totalPages, setTotalPages] = useState(0);
   const [page, setPage] = useState(0);
   const [size, setSize] = useState(2);
   const [sort, setSort] = useState("id,asc");
+  const [loading, setLoading] = useState(true);
   const {cartSum, setCartSum} = useContext(CartSumContext);
 
   //uef variant 1: fetch().then().then()
@@ -28,9 +30,12 @@ function HomePage() {
       try {
         const res = await fetch(`http://localhost:8080/products?size=${size}&page=${page}&sort=${sort}`);
         const json = await res.json();
-        setProducts(json.content);
+        setProducts(json.content);        
+        setTotalPages(json.totalPages);
       } catch (error) {
         console.log(error)
+      } finally {
+        setLoading(false);
       }
     }
     load();
@@ -51,6 +56,10 @@ function HomePage() {
     }
     localStorage.setItem("cart", JSON.stringify(cartLS));
     setCartSum(cartSum + product.price);
+  }
+
+  if (loading) {
+    return <div>Loading...</div>
   }
 
   return (
@@ -82,8 +91,8 @@ function HomePage() {
         </div>
 
         <button disabled={page === 0} onClick={() => setPage(page - 1)}>Eelmine</button>
-        <span>{page + 1}</span>
-        <button onClick={() => setPage(page + 1)}>Järgmine</button>
+        <span>  {page + 1}  </span>
+        <button disabled={page+1 >= totalPages} onClick={() => setPage(page + 1)}>Järgmine</button>
         
     </div>
   )

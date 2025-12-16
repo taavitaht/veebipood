@@ -36,6 +36,7 @@ function Menu() {
             {loggedIn && (role === "ADMIN" || role === "SUPERADMIN") &&
               <>
                 <Nav.Link as={Link} to="/lisa-toode">{t('menu.add-product')}</Nav.Link>
+                
               </>
             }
             {loggedIn && role === "SUPERADMIN" &&

@@ -15,6 +15,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 //@CrossOrigin("http://localhost:5173")
 @RestController
@@ -44,7 +45,7 @@ public class OrderController {
     }
 
     @PostMapping("order")
-    public String createOrder(@RequestBody List<OrderRow> orderRows){
+    public String createOrder(@RequestBody List<OrderRow> orderRows) throws ExecutionException {
         Long personId = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
         Order order = orderService.saveOrder(orderRows, personId);
         return orderService.makePayment(order.getId(), order.getTotal());

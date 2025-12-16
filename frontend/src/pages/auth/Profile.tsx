@@ -89,7 +89,7 @@ function Profile() {
       <input defaultValue={person.lastName} onChange={(e) => setPerson({ ...person, "lastName": e.target.value })} type="text" /><br />
       <label>Email</label><br />
       <input defaultValue={person.email} onChange={(e) => setPerson({ ...person, "email": e.target.value })} type="text" /><br />
-      <button onClick={() => backendQuery("/persons", "PUT", person)}>Update profile</button>
+      <button onClick={() => backendQuery("/persons", "PUT", person, "updated-profile")}>Update profile</button>
       <ToastContainer />
       <br /><br /><br />
 
@@ -111,7 +111,7 @@ function Profile() {
           ...passwordCredentials,
           "confirmPassword": e.target.value
         })} /><br />
-      <button onClick={() => backendQuery("/update-password", "PATCH", passwordCredentials)}>Muuda parool</button>
+      <button onClick={() => backendQuery("/update-password", "PATCH", passwordCredentials, "updated-password")}>Muuda parool</button>
     </div>
   )
 }

@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+//import { get } from "http";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 
 function useFetch() {
     const { t } = useTranslation(); // kui poleks seda rida, oleks util kaustas
 
-    async function makeQuery(endpoint: string, apiMethod: string, payload: any) {
+    async function makeQuery(endpoint: string, apiMethod: string, payload: any, message: string) {
         try {
             const res = await fetch("http://localhost:8080" + endpoint, {
                 method: apiMethod,
@@ -15,11 +16,15 @@ function useFetch() {
                     "Content-Type": "application/json"
                 }
             });
+            if (res.status === 403) {
+                toast.error(getErrorMesage("not-enough-rights"));
+                return;
+            }
             const json = await res.json();
             if (json.message && json.timestamp && json.status) {
                 toast.error(getErrorMesage(json.message));
             } else {
-                toast.success(t("profile.success"));
+                toast.success(t("success." + message));
             }
         } catch (error) {
             console.log(error)

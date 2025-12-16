@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 function useLoadItems(endpoint: string, tokenNeeded: boolean) {
     const [items, setItems] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const load = async () => {
@@ -17,6 +18,7 @@ function useLoadItems(endpoint: string, tokenNeeded: boolean) {
                     res = await fetch("http://localhost:8080" + endpoint);
                 }
                 const json = await res.json();
+                setLoading(false);
                 setItems(json);
             } catch (error) {
                 console.log(error)
@@ -27,7 +29,9 @@ function useLoadItems(endpoint: string, tokenNeeded: boolean) {
 
 
     return (
-        items
+        // 1. {items, loading}
+        // 2. [items, loading]
+        [items, loading]
     )
 }
 

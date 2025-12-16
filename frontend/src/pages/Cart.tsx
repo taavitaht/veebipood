@@ -10,6 +10,8 @@ function Cart() {
   const [orderRows, setOrderRows] = useState<OrderRow[]>(JSON.parse(localStorage.getItem("cart") || "[]"));
   const {setCartSum} = useContext(CartSumContext);
 
+  // võta kõik pakiautomaadid API endpointilt parcel-machines
+
   function empty() {
     setOrderRows([]);
     localStorage.setItem("cart", "[]");
@@ -48,6 +50,7 @@ function Cart() {
   }
 
   function pay(){
+    // pakiautomaat kaasa saata
     fetch("http://localhost:8080/order", {
       method: "POST",
       body: JSON.stringify(orderRows),
@@ -86,14 +89,23 @@ function Cart() {
           <button onClick={() => deleteProduct(index)}>x</button>
         </div>
       )}
-
+{
+      orderRows.length > 0 &&
+      <>
       <br /><br />
 
       <div>Ostukorvi kogusumma: {calculateCartSum().toFixed(2)}€</div>
 
+      {/* pakiautomaadid kuvada .map tsükli abil
+      kui valitakse, siis salvesta useState muutujasse: selectedParcelMachine (string)*/}
+
       <br /><br />
+
+      {/* Ära näita maksa nuppu kui pole sisse logitud, kui pole sisse logitud näita siin "logi sisse" nuppu */}
       <button onClick={pay}>Maksa</button>
             
+      </>
+}
     </div>
   )
 }
