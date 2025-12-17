@@ -8,10 +8,13 @@ import ee.taavi.veebipood.model.LoginCredentials;
 import ee.taavi.veebipood.model.PasswordCredentials;
 import ee.taavi.veebipood.repository.PersonRepository;
 import ee.taavi.veebipood.service.JwtService;
+import ee.taavi.veebipood.service.MailService;
 import ee.taavi.veebipood.service.PersonService;
 import ee.taavi.veebipood.util.Validations;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,13 +33,23 @@ public class PersonController {
     @Autowired
     private PersonService personService;
 
+    @Autowired
+    private MailService mailService;
+
     @GetMapping("persons")
     public List<Person> getPersons() {
         return personRepository.findByOrderByIdAsc();
     }
 
+    @Cacheable(value = "personCache", key = "#id")
+    @GetMapping("person/{id}")
+    public Person getPerson(@PathVariable Long id) {
+        return personRepository.findById(id).orElseThrow();
+    }
+
     @GetMapping("public-persons")
     public List<PersonDTO> getPublicPersons() {
+        mailService.sendPlainText("taavi656@gmail.com", "Pealkiri", "Sisu");
         return List.of(modelMapper.map(personRepository.findAll(), PersonDTO[].class));
     }
 
@@ -45,7 +58,7 @@ public class PersonController {
         return personService.savePerson(person);
     }
 
-
+    @CachePut(value = "personCache", key = "#person.id")
     @PutMapping("persons")
     public Person editPerson(@RequestBody Person person) {
         if (person.getId() == null) {

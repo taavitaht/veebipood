@@ -20,7 +20,7 @@ function AddProduct() {
   });
 
   const  backendQuery = useFetch();
-  const categories: Category[] = useLoadItems("/categories", false);
+  const [categories, loading]: Category[] = useLoadItems("/categories", false);
 
   // function add() {}
   const add = async () => {
