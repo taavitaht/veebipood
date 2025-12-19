@@ -17,7 +17,7 @@ function HomePage() {
   //uef variant 1: fetch().then().then()
   /*
   useEffect(() => {
-    fetch("http://localhost:8080/products")
+    fetch(import.meta.env.VITE_BACKEND_URL + "/products")
     .then(res => res.json())
     .then(json => setProducts(json))
     .catch(error => console.log(error))
@@ -28,7 +28,7 @@ function HomePage() {
   useEffect(() => {
     const load = async() => {
       try {
-        const res = await fetch(`http://localhost:8080/products?size=${size}&page=${page}&sort=${sort}`);
+        const res = await fetch(import.meta.env.VITE_BACKEND_URL + `/products?size=${size}&page=${page}&sort=${sort}`);
         const json = await res.json();
         setProducts(json.content);        
         setTotalPages(json.totalPages);

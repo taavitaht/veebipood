@@ -14,7 +14,7 @@ function Profile() {
   useEffect(() => {
     async function load() {
       try {
-        const res = await fetch("http://localhost:8080/person", {
+        const res = await fetch(import.meta.env.VITE_BACKEND_URL + "/person", {
           headers: {
             "Authorization": "Bearer " + sessionStorage.getItem("token")
           }
@@ -32,7 +32,7 @@ function Profile() {
 
   // async function updateProfile() {
   //   try {
-  //     const res = await fetch("http://localhost:8080/persons", {
+  //     const res = await fetch(import.meta.env.VITE_BACKEND_URL + "/persons", {
   //       method: "PUT",
   //       body: JSON.stringify(person),
   //       headers: {
@@ -53,7 +53,7 @@ function Profile() {
 
   // async function changePassword() {
   //   try {
-  //     const res = await fetch("http://localhost:8080/update-password", {
+  //     const res = await fetch(import.meta.env.VITE_BACKEND_URL + "/update-password", {
   //       method: "PATCH",
   //       body: JSON.stringify(passwordCredentials),
   //       headers: {

@@ -51,7 +51,7 @@ function Cart() {
 
   function pay(){
     // pakiautomaat kaasa saata
-    fetch("http://localhost:8080/order", {
+    fetch(import.meta.env.VITE_BACKEND_URL + "/order", {
       method: "POST",
       body: JSON.stringify(orderRows),
       headers: {

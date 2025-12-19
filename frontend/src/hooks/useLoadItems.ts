@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
-function useLoadItems(endpoint: string, tokenNeeded: boolean) {
-    const [items, setItems] = useState([]);
+function useLoadItems<T>(endpoint: string, tokenNeeded: boolean) {
+    const [items, setItems] = useState<T[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -9,13 +9,13 @@ function useLoadItems(endpoint: string, tokenNeeded: boolean) {
             try {
                 let res;
                 if (tokenNeeded) {
-                    res = await fetch("http://localhost:8080" + endpoint, {
+                    res = await fetch(import.meta.env.VITE_BACKEND_URL + endpoint, {
                         headers: {
                             "Authorization": "Bearer " + sessionStorage.getItem("token")
                         }
                     });
                 } else {
-                    res = await fetch("http://localhost:8080" + endpoint);
+                    res = await fetch(import.meta.env.VITE_BACKEND_URL + endpoint);
                 }
                 const json = await res.json();
                 setLoading(false);
@@ -31,7 +31,8 @@ function useLoadItems(endpoint: string, tokenNeeded: boolean) {
     return (
         // 1. {items, loading}
         // 2. [items, loading]
-        [items, loading]
+        //[items, loading] as const
+        {items, loading}
     )
 }
 
