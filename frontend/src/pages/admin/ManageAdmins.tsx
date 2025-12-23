@@ -5,7 +5,7 @@ import type { Person } from "../../models/Person";
 function ManageAdmins() {
 
   const [persons, setPersons] = useState<Person[]>([]);
-  const {items: dbPersons } = useLoadItems<Person>("/persons", true);
+  const {items: dbPersons, loading } = useLoadItems<Person>("/persons", true);
 
   useEffect(() => {
     setPersons(dbPersons);
@@ -22,6 +22,10 @@ function ManageAdmins() {
     .then(json => {
       setPersons(json);
     })
+  }
+
+  if (loading) {
+    return <div>Loading...</div>
   }
 
   return (

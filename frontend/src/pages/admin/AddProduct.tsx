@@ -21,7 +21,7 @@ function AddProduct() {
 
   const backendQuery = useFetch();
   //const [categories, loading]: Category[] = useLoadItems("/categories", false);
-  //const [categories] = useLoadItems<Category>("/categories", false);
+  //const [categories]: [Category[]] = useLoadItems<Category>("/categories", false);
   const { items: categories } = useLoadItems<Category>("/categories", false);
 
 

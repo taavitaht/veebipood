@@ -29,8 +29,8 @@ function useLoadItems<T>(endpoint: string, tokenNeeded: boolean) {
 
 
     return (
-        // 1. {items, loading}
-        // 2. [items, loading]
+        // 1. {items, loading}, nimetused olulised
+        // 2. [items, loading], järjekord oluline
         //[items, loading] as const
         {items, loading}
     )
